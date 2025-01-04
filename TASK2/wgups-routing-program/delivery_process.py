@@ -79,8 +79,8 @@ def simulate_delivery():
         truck_1.current_time += time_to_travel
         truck_1.mileage += distance
 
-        print(f"Current time: {truck_1.current_time.strftime('%I:%M %p')}")
-        
+        print(f"Current simulation time: {truck_1.current_time.strftime('%I:%M %p')}")
+
         # Update Package 9's address dynamically
         update_package_9_address(truck_1.current_time)
 
@@ -95,7 +95,7 @@ def simulate_delivery():
             package.delivery_time = truck_1.current_time
             print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
-        # Retry delivery for Package 9 if address has been updated
+        # Check and retry delivery for Package 9
         for package in truck_1.packages:
             if package.status == "At Hub" and package.id == 9 and package.address != "Wrong Address":
                 print(f"Retrying delivery for Package {package.id} after address update.")
@@ -104,9 +104,6 @@ def simulate_delivery():
                 print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
     print(f"Total mileage for Truck {truck_1.id}: {truck_1.mileage} miles")
-
-
-
 
 
 if __name__ == "__main__":
