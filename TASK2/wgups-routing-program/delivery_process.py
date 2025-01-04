@@ -72,7 +72,6 @@ def simulate_delivery():
         {"distance": 5, "packages": truck_1.packages},
     ]
 
-    # Simulate delivery process
     while truck_1.route:
         destination = truck_1.route.pop(0)
         distance = destination['distance']
@@ -80,6 +79,8 @@ def simulate_delivery():
         truck_1.current_time += time_to_travel
         truck_1.mileage += distance
 
+        print(f"Current time: {truck_1.current_time.strftime('%I:%M %p')}")
+        
         # Update Package 9's address dynamically
         update_package_9_address(truck_1.current_time)
 
@@ -103,6 +104,7 @@ def simulate_delivery():
                 print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
     print(f"Total mileage for Truck {truck_1.id}: {truck_1.mileage} miles")
+
 
 
 
