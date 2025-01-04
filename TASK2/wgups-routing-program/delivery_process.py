@@ -83,8 +83,8 @@ def simulate_delivery():
         update_package_9_address(truck_1.current_time)
 
         for package in destination['packages']:
-            # Skip Package 9 if current time is before 10:20 AM
-            if package.id == 9 and truck_1.current_time < datetime.strptime("10:20 AM", "%I:%M %p"):
+            # Retry Package 9 delivery if address is now updated
+            if package.id == 9 and package.address == "Wrong Address":
                 print(f"Skipping Package {package.id} as address has not been updated yet.")
                 continue
 
@@ -92,7 +92,16 @@ def simulate_delivery():
             package.delivery_time = truck_1.current_time
             print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
+        # Check if any packages were skipped and retry delivery
+        for package in truck_1.packages:
+            if package.status == "At Hub" and package.id == 9 and package.address != "Wrong Address":
+                print(f"Retrying delivery for Package {package.id} after address update.")
+                package.status = "Delivered"
+                package.delivery_time = truck_1.current_time
+                print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
+
     print(f"Total mileage for Truck {truck_1.id}: {truck_1.mileage} miles")
+
 
 
 if __name__ == "__main__":
