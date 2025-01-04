@@ -63,7 +63,7 @@ def update_package_9_address(current_time):
 def simulate_delivery():
     truck_1 = Truck(truck_id=1, speed=18, max_packages=16)
 
-    # Example: Load truck 1 with all packages
+    # Load all packages onto the truck
     for package in all_packages:
         truck_1.load_package(package)
 
@@ -72,6 +72,7 @@ def simulate_delivery():
         {"distance": 5, "packages": truck_1.packages},
     ]
 
+    # Simulate delivery process
     while truck_1.route:
         destination = truck_1.route.pop(0)
         distance = destination['distance']
@@ -79,20 +80,21 @@ def simulate_delivery():
         truck_1.current_time += time_to_travel
         truck_1.mileage += distance
 
-        # Update Package 9 address dynamically
+        # Update Package 9's address dynamically
         update_package_9_address(truck_1.current_time)
 
         for package in destination['packages']:
-            # Retry Package 9 delivery if address is now updated
+            # Skip Package 9 if the address has not been updated yet
             if package.id == 9 and package.address == "Wrong Address":
                 print(f"Skipping Package {package.id} as address has not been updated yet.")
                 continue
 
+            # Deliver the package
             package.status = "Delivered"
             package.delivery_time = truck_1.current_time
             print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
-        # Check if any packages were skipped and retry delivery
+        # Retry delivery for Package 9 if address has been updated
         for package in truck_1.packages:
             if package.status == "At Hub" and package.id == 9 and package.address != "Wrong Address":
                 print(f"Retrying delivery for Package {package.id} after address update.")
@@ -101,6 +103,7 @@ def simulate_delivery():
                 print(f"Delivered Package {package.id} to {package.address} at {package.delivery_time.strftime('%I:%M %p')}")
 
     print(f"Total mileage for Truck {truck_1.id}: {truck_1.mileage} miles")
+
 
 
 
